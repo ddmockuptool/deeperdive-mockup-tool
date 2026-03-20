@@ -1,0 +1,13 @@
+{
+  "name": "url-mockup-tool",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "capture": "node capture.mjs",
+    "serve": "node server.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^24.4.0"
+  }
+}
