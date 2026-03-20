@@ -189,6 +189,27 @@ const server = http.createServer(async (req, res) => {
 		return;
 	}
 
+	if (req.method === "GET" && url.pathname === "/health") {
+		try {
+			const puppeteer = await import("puppeteer");
+			const execPath = process.env.PUPPETEER_EXECUTABLE_PATH;
+			const b = await puppeteer.default.launch({
+				headless: "new",
+				timeout: 30_000,
+				args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--no-zygote"],
+				...(execPath ? { executablePath: execPath } : {}),
+			});
+			const version = await b.version();
+			await b.close();
+			res.writeHead(200, { "Content-Type": "application/json" });
+			res.end(JSON.stringify({ ok: true, chrome: version, executablePath: execPath || "bundled" }));
+		} catch (e) {
+			res.writeHead(500, { "Content-Type": "application/json" });
+			res.end(JSON.stringify({ ok: false, error: e.message }));
+		}
+		return;
+	}
+
 	if (req.method === "POST" && url.pathname === "/capture") {
 		try {
 			const body = await parseJsonBody(req);

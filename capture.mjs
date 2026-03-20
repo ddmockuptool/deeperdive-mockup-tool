@@ -87,7 +87,9 @@ export async function capturePageToPng(opts) {
 	const widgetHtml = buildWidgetMarkup({ publication, ...widgetOptions });
 
 	const launchOpts = {
-		headless: true,
+		headless: "new",
+		timeout: 60_000,
+		protocolTimeout: 90_000,
 		args: [
 			"--no-sandbox",
 			"--disable-setuid-sandbox",
@@ -95,8 +97,8 @@ export async function capturePageToPng(opts) {
 			"--disable-gpu",
 			"--no-first-run",
 			"--no-zygote",
+			"--disable-extensions",
 		],
-		protocolTimeout: 60_000,
 	};
 	if (process.env.PUPPETEER_EXECUTABLE_PATH) {
 		launchOpts.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
