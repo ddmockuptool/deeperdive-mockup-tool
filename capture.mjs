@@ -87,24 +87,27 @@ export async function capturePageToPng(opts) {
 	const widgetHtml = buildWidgetMarkup({ publication, ...widgetOptions });
 
 	const launchOpts = {
-		headless: "shell",
+		headless: true,
 		args: [
 			"--no-sandbox",
 			"--disable-setuid-sandbox",
 			"--disable-dev-shm-usage",
 			"--disable-gpu",
-			"--disable-extensions",
-			"--disable-background-networking",
-			"--disable-default-apps",
 			"--no-first-run",
-			"--single-process",
+			"--no-zygote",
 		],
 		protocolTimeout: 60_000,
 	};
 	if (process.env.PUPPETEER_EXECUTABLE_PATH) {
 		launchOpts.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
 	}
-	const browser = await puppeteer.launch(launchOpts);
+
+	let browser;
+	try {
+		browser = await puppeteer.launch(launchOpts);
+	} catch (err) {
+		throw new Error(`Chrome failed to start: ${err.message}`);
+	}
 
 	try {
 		const page = await browser.newPage();
