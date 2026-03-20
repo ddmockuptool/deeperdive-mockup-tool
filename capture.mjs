@@ -87,8 +87,19 @@ export async function capturePageToPng(opts) {
 	const widgetHtml = buildWidgetMarkup({ publication, ...widgetOptions });
 
 	const launchOpts = {
-		headless: true,
-		args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+		headless: "shell",
+		args: [
+			"--no-sandbox",
+			"--disable-setuid-sandbox",
+			"--disable-dev-shm-usage",
+			"--disable-gpu",
+			"--disable-extensions",
+			"--disable-background-networking",
+			"--disable-default-apps",
+			"--no-first-run",
+			"--single-process",
+		],
+		protocolTimeout: 60_000,
 	};
 	if (process.env.PUPPETEER_EXECUTABLE_PATH) {
 		launchOpts.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;

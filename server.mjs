@@ -207,7 +207,7 @@ const server = http.createServer(async (req, res) => {
 				url: pageUrl,
 				outputPath,
 				waitUntil: "domcontentloaded",
-				timeout: 30_000,
+				timeout: 60_000,
 				publication: typeof body.publication === "string" ? body.publication : "Daily Star",
 				cssSelector: typeof body.cssSelector === "string" ? body.cssSelector.trim() : "",
 			});

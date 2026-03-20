@@ -2,6 +2,7 @@ FROM node:20-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium \
+    dumb-init \
     fonts-liberation \
     fonts-noto-color-emoji \
     libgbm1 \
@@ -30,4 +31,5 @@ COPY . .
 RUN mkdir -p .output
 
 EXPOSE 3847
+ENTRYPOINT ["dumb-init", "--"]
 CMD ["node", "server.mjs"]
