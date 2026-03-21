@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: deeperdive-mockup-tool
+    runtime: docker
+    repo: https://github.com/ddmockuptool/deeperdive-mockup-tool
+    branch: main
+    plan: standard
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
