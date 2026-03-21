@@ -93,8 +93,6 @@ const REMOVE_SELECTORS = [
 	".newsletter-modal",
 	'[class*="interstitial"]',
 	'[id*="interstitial"]',
-	".paywall",
-	'[class*="paywall"]',
 	".tp-modal",
 	".tp-backdrop",
 	".tp-iframe-wrapper",
@@ -215,22 +213,28 @@ export async function tryClickConsentInIframes(page) {
 	for (const frame of page.frames()) {
 		if (frame === main) continue;
 		if (frame.url() === "about:blank") continue;
-		for (const sel of FRAME_CONSENT_SELECTORS) {
-			try {
-				const h = await frame.$(sel);
-				if (h) {
-					await h.click({ delay: 20 });
-					await h.dispose();
+		// Cap per-frame processing to 2 seconds to avoid hanging on slow iframes
+		await Promise.race([
+			(async () => {
+				for (const sel of FRAME_CONSENT_SELECTORS) {
+					try {
+						const h = await frame.$(sel);
+						if (h) {
+							await h.click({ delay: 20 });
+							await h.dispose();
+						}
+					} catch {
+						/* ignore */
+					}
 				}
-			} catch {
-				/* ignore */
-			}
-		}
-		try {
-			await frame.evaluate(clickConsentClickablesInDocument);
-		} catch {
-			/* cross-origin or blocked */
-		}
+				try {
+					await frame.evaluate(clickConsentClickablesInDocument);
+				} catch {
+					/* cross-origin or blocked */
+				}
+			})(),
+			new Promise((r) => setTimeout(r, 2000)),
+		]);
 	}
 }
 

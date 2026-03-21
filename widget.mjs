@@ -9,8 +9,11 @@ export function buildWidgetMarkup(options = {}) {
 			"Royal Air Philippines has entered administration and cancelled all commercial flights, leaving thousands of passengers stranded",
 		question1 = "Why did Royal Air Philippines suspend flights?",
 		question2 = "How did reduced Chinese arrivals affect airlines?",
-		interestQuestion = "What caption did Liz Truss use in her controversial Trump photo post?",
+		interestQuestion = "What are the latest developments in this story?",
 		askPlaceholder = null,
+		title = "What You Need To Know",
+		readMore = "Read more",
+		interestsLabel = "Based on your interests",
 	} = options;
 
 	const ask = askPlaceholder ?? `Ask ${publication} anything`;
@@ -186,12 +189,12 @@ export function buildWidgetMarkup(options = {}) {
 <div class="dd-mock-card">
   <div class="dd-mock-section">
     <div class="dd-mock-headline">
-      <span class="dd-mock-title">What You Need To Know</span>
+      <span class="dd-mock-title">${escapeHtml(title)}</span>
       <span class="dd-mock-info" title="Info">i</span>
     </div>
     <div class="dd-mock-summary-row">
       <p class="dd-mock-summary">${escapeHtml(summary)}</p>
-      <a class="dd-mock-readmore" role="button">Read more <span aria-hidden="true">→</span></a>
+      <a class="dd-mock-readmore" role="button">${escapeHtml(readMore)} <span aria-hidden="true">→</span></a>
     </div>
   </div>
   <hr class="dd-mock-divider" />
@@ -207,7 +210,7 @@ export function buildWidgetMarkup(options = {}) {
   <hr class="dd-mock-divider" />
   <div class="dd-mock-link-row" role="button">
     <span class="dd-mock-link-text">
-      <span class="dd-mock-interests-label">Based on your interests</span>
+      <span class="dd-mock-interests-label">${escapeHtml(interestsLabel)}</span>
       ${escapeHtml(interestQuestion)}
     </span>
     <span class="dd-mock-chevron" aria-hidden="true">›</span>
